@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Route Map with Estimated Time</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        form { margin-bottom: 20px; }
+        input, button { display: block; margin-bottom: 10px; padding: 5px; width: 100%; }
+        #map { height: 500px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Delivery Route Map with Estimated Time</h1>
+
+    <form method="POST">
+        <input type="text" id="sender" name="sender" placeholder="Enter Sender Office (e.g., Bemina SO)" required>
+        <input type="text" id="receiver" name="receiver" placeholder="Enter Receiver Office (e.g., Andhra University Sub Post Office)" required>
+        <button type="submit">Show Route and Estimated Time</button>
+    </form>
+
+    {% if map_html %}
+        <h2>Route Map</h2>
+        <div id="map">{{ map_html|safe }}</div>
+    {% endif %}
+
+    {% if route_info %}
+        <h2>Route Information</h2>
+        <ul>
+            {% for stop in route_info %}
+                <li><strong>From {{ stop.current_office }} to {{ stop.next_office }}</strong>: 
+                Distance: {{ stop.distance }} km, Time: {{ stop.time }} hours</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

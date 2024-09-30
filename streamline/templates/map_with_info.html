@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Route Map with Estimated Time</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
+        form { 
+            margin-bottom: 20px; 
+        }
+        input, button { 
+            display: block; 
+            margin-bottom: 10px; 
+            padding: 10px; 
+            width: 100%; 
+        }
+
+        /* Flexbox container for map and table */
+        .map-table-container {
+            display: flex;
+            flex-direction: row; /* Align map and table side by side */
+            gap: 20px; /* Add space between the map and the table */
+            margin-top: 20px;
+        }
+
+        /* Map container */
+        #map { 
+            flex: 1; /* Allow map to take available space */
+            height: 500px; 
+            width: 100%; 
+            background-color: #e5e5e5; /* Placeholder color */
+        }
+
+        /* Table container */
+        .table-container {
+            flex: 1; /* Allow table to take available space */
+        }
+
+        /* Table styles */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #f2f2f2; 
+        }
+
+        /* Responsive design: stack map and table vertically on smaller screens */
+        @media (max-width: 768px) {
+            .map-table-container {
+                flex-direction: column; /* Stack map and table vertically on small screens */
+            }
+            #map {
+                height: 400px; /* Adjust map height for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Delivery Route Map with Estimated Time (Consignment ID: {{ consignment_number }})</h1>
+    </div>
+
+    {% if map_html %}
+        <div class="map-table-container">
+            <!-- Map Section -->
+            <div id="map">{{ map_html|safe }}</div>
+
+            <!-- Table Section -->
+            <div class="table-container">
+                <h3>Final Destination</h3>
+                <p>Final Stop: {{ final_office_name }}</p>
+                <p>Total Estimated Time: {{ total_time }} hours</p>
+                <p><strong>Estimated Delivery Date:</strong> {{ estimated_delivery_date }}</p>  <!-- New Line for Delivery Date -->
+
+                <h3>Estimated Time Table</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>From Office</th>
+                            <th>Next Office</th>
+                            <th>Distance (km)</th>
+                            <th>Estimated Time (hours)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stop in route_info %}
+                            <tr>
+                                <td>{{ stop.current_office }}</td>
+                                <td>{{ stop.next_office }}</td>
+                                <td>{{ stop.distance }}</td>
+                                <td>{{ stop.time }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>
